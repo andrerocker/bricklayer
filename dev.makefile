@@ -20,3 +20,6 @@ bootstrap: create_venv
 
 test:
 	@$(bricklayer_env) $(venv_bin)/nosetests $(TEST)
+
+rest:
+	$(venv_bin)/twistd -ny bricklayer/rest.py
