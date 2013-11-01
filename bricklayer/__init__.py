@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 __all__ = ['builder', 'projects', 'utils', 'service']
 
