@@ -10,3 +10,4 @@ static/Build
 *.pid
 *.log.*
 *.log
+.venv
