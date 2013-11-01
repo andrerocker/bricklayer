@@ -22,4 +22,7 @@ test:
 	@$(bricklayer_env) $(venv_bin)/nosetests $(TEST)
 
 rest:
-	$(venv_bin)/twistd -ny bricklayer/rest.py
+	PYTHONPATH=bricklayer $(venv_bin)/twistd -ny bricklayer/rest.py
+
+console:
+	PYTHONPATH=bricklayer $(venv_bin)/python
