@@ -1,8 +1,9 @@
 import os 
-import subprocess
 import re
 import shutil
 import logging as log
+import subprocess
+
 from config import BrickConfig
 
 devnull = open('/dev/null', 'w')

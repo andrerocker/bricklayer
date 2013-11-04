@@ -1,4 +1,4 @@
-class Log(cyclone.web.RequestHandler):
+class LogController(cyclone.web.RequestHandler):
     def get(self, project, bid):
         build_info = BuildInfo(project, bid)
         if os.path.isfile(build_info.log()):

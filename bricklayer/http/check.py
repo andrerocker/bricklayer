@@ -1,4 +1,4 @@
-class Check(cyclone.web.RequestHandler):
+class CheckController(cyclone.web.RequestHandler):
     def post(self, project_name):
         project = Projects(project_name)
         builder = Builder(project_name)

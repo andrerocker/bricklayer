@@ -1,9 +1,13 @@
-class Clear(cyclone.web.RequestHandler):
-    def post(self, project_name):
+from cyclone import escape
+from cyclone.web import RequestHandler
+
+class ClearController(RequestHandler):
+    def post(self, project):
         try:
-            project = Projects(project_name)
-            git = Git(project)
-            git.clear_repo()
-            self.write(cyclone.escape.json_encode({'status': 'ok'}))
+            self._clear_repo(Project(project))
+            self.write(escape.json_encode({'status': 'ok'}))
         except Exception, e:
-            self.write(cyclone.escape.json_encode({'status': 'fail', 'error': str(e)}))
+            self.write(escape.json_encode({'status': 'fail', 'error': str(e)}))
+
+	def _clear_repo(self, project):
+		Git(project).clear_repo()

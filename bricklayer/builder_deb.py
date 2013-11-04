@@ -7,13 +7,14 @@ import glob
 import stat
 import subprocess
 import ftplib
-import pystache
+import utils.pystache
 import logging
-from urlparse import urlparse
 
-from projects import Projects
+from urlparse import urlparse
 from config import BrickConfig
-from build_info import BuildInfo
+
+from model.project import Project
+from model.build_info import BuildInfo
 
 log = logging.getLogger('builder')
 

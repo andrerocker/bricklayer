@@ -1,5 +1,4 @@
-$(function(){
-    
+$(document).ready(function(){    
     var filter = "";
 
     function refresh_details(section, name) {
@@ -255,13 +254,9 @@ $(function(){
         return false;
     });
 
-    var project_list = $.parseJSON(
-            $.ajax({
-                url: "/project", 
-                dataType: "json", 
-                async: false}).responseText);
-
+    var project_list = $.parseJSON($.ajax({url: "/project", dataType: "json", async: false}).responseText);
     var project_names = project_list.map(function(p) {return p['name'];});
+    
     $('#search-projects').typeahead({'source': project_names});
 
     visit("project");

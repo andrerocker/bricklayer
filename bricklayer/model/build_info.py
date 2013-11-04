@@ -1,9 +1,9 @@
-import redis
 import time
-from bricklayer.model_base import transaction
+import redis
+
+from model.model_base import transaction
 
 class BuildInfo:
-
     def __init__(self, project='', build_id=0):
         self.redis_cli = self.connect()
         self.project = project

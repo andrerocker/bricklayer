@@ -1,5 +1,6 @@
 import sys
 reload(sys)
+
 sys.setdefaultencoding('utf8')
 
 import os
@@ -11,17 +12,16 @@ import shlex
 import shutil
 import logging
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'utils'))
-sys.path.append(os.path.dirname(__file__))
 
-from bricklayer.utils import pystache
 import git
+from utils import pystache
 
 from twisted.internet import threads, reactor, defer
 from config import BrickConfig
-from projects import Projects
 
-from builder_rpm import BuilderRpm
+from model.project import Project
+
+# from builder_rpm import BuilderRpm
 from builder_deb import BuilderDeb
 from build_options import BuildOptions
 from build_container import BuildContainer

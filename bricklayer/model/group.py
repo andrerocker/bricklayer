@@ -1,7 +1,8 @@
 import redis
-from model_base import ModelBase, transaction
 
-class Groups(ModelBase):
+from model.model_base import ModelBase
+
+class Group(ModelBase):
     namespace = 'group'
   
     def __init__(self, group_name='', repo_addr='', repo_user='', repo_passwd=''):
@@ -16,11 +17,11 @@ class Groups(ModelBase):
    
     @classmethod
     def get_all(self):
-        connection_obj = Groups()
+        connection_obj = Group()
         redis_cli = connection_obj.connect()
         keys = redis_cli.keys('%s:*' % self.namespace)
         groups = []
         for key in keys:
             key = key.replace('%s:' % self.namespace, '')
-            groups.append(Groups(key)) 
+            groups.append(Group(key)) 
         return groups

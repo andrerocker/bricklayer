@@ -22,7 +22,10 @@ test:
 	@$(bricklayer_env) $(venv_bin)/nosetests $(TEST)
 
 rest:
-	PYTHONPATH=bricklayer $(venv_bin)/twistd -ny bricklayer/rest.py
+	BRICKLAYERCONFIG=etc/bricklayer/bricklayer.ini PYTHONPATH=bricklayer $(venv_bin)/twistd -ny bricklayer/rest.py --pidfile tmp/rest.pid
+
+service:
+	BRICKLAYERCONFIG=etc/bricklayer/bricklayer.ini PYTHONPATH=bricklayer $(venv_bin)/twistd -ny bricklayer/service.py --pidfile tmp/service.pid
 
 console:
 	PYTHONPATH=bricklayer $(venv_bin)/python

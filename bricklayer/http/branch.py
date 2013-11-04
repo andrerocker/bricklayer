@@ -1,6 +1,6 @@
 from cyclone.web import RequestHandler
 
-class Branch(cyclone.web.RequestHandler):
+class BranchController(cyclone.web.RequestHandler):
     def get(self, project_name):
         project = Projects(project_name)
         git = Git(project)

@@ -1,10 +1,13 @@
-import shutil
 import redis
-from model_base import ModelBase, transaction
-from groups import Groups
+import shutil
+
 from git import Git
 
-class Projects(ModelBase):
+from model.group import Group
+from model.model_base import ModelBase
+from model.model_base import transaction
+
+class Project(ModelBase):
     
     namespace = 'project'
 
@@ -91,13 +94,13 @@ class Projects(ModelBase):
 
     @classmethod
     def get_all(self):
-        connection_obj = Projects()
+        connection_obj = Project()
         redis_cli = connection_obj.connect()
         keys = redis_cli.keys('%s:*' % self.namespace)
         projects = []
         for key in keys:
             key = key.replace('%s:' % self.namespace, '')
-            projects.append(Projects(key)) 
+            projects.append(Project(key))
         return projects
     
     def clear_branches(self):

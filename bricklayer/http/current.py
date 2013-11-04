@@ -1,4 +1,4 @@
-class Current(cyclone.web.RequestHandler):
+class CurrentController(cyclone.web.RequestHandler):
     def get(self):
         response = []
         currents = CurrentBuild.get_all()

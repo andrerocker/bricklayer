@@ -1,5 +1,7 @@
 import redis
-from model_base import ModelBase, transaction
+
+from model.model_base import ModelBase
+from model.model_base import transaction
 
 class CurrentBuild(ModelBase):
     namespace = 'current_build'
