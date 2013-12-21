@@ -17,7 +17,7 @@ def transaction(method):
     return new
 
 class ModelBase:
-    
+
     redis_cli = None
     namespace = ''
 
@@ -31,7 +31,7 @@ class ModelBase:
             data[attr] = getattr(self, attr)
         self.redis_cli.hmset("%s:%s" % (self.namespace, self.name), data)
         self.populate(self.name)
-    
+
     @transaction
     def populate(self, name):
         res = self.redis_cli.hgetall("%s:%s" % (self.namespace, name))

@@ -8,27 +8,34 @@ from model.model_base import ModelBase
 from model.model_base import transaction
 
 class Project(ModelBase):
-    
-    namespace = 'project'
 
-    def __init__(self, name='', git_url='', install_cmd='', build_cmd='', version='', release='', group_name='', experimental=1):
+    namespace = "project"
+
+    def __init__(self, name=""):
         self.name = name
-        self.git_url = git_url
-        self.install_cmd = install_cmd
-        self.build_cmd = build_cmd
-        self.group_name = group_name
-        if version:
-            self.version(version=version)
-        self.release = release
-        self.experimental = experimental
-        self.email = 'bricklayer@locaweb.com.br'
-        self.username = 'Bricklayer Builder'
-        self.install_prefix = ''
+        self.git_url = ""
+        self.install_cmd = ""
+        self.build_cmd = ""
+        self.group_name = ""
+        self.version(version="")
+        self.release = ""
+        self.experimental = 1
+        self.install_prefix = ""
         self.populate(self.name)
 
     def __dir__(self):
-        return ['name', 'git_url', 'install_cmd', 'build_cmd', 'email', 'username', 'release', 'group_name', 'experimental']
-   
+        return [
+            'name',
+            'git_url',
+            'install_cmd',
+            'build_cmd',
+            'email',
+            'username',
+            'release',
+            'group_name',
+            'experimental'
+        ]
+
     @transaction
     def start_building(self):
         self.redis_cli.setex('build_lock:%s' % self.name, 3600, 1)
@@ -47,12 +54,12 @@ class Project(ModelBase):
     @transaction
     def add_branch(self, branch):
         self.redis_cli.rpush('branches:%s' % self.name, branch)
-     
+
     @transaction
     def remove_branch(self, branch):
         index = self.redis_cli.lindex('branches:%s' % self.name, branch)
         self.redis_cli.lrem('branches:%s' % self.name, index)
-    
+
     @transaction
     def repository(self):
         group = Groups(self.group_name)
@@ -102,7 +109,7 @@ class Project(ModelBase):
             key = key.replace('%s:' % self.namespace, '')
             projects.append(Project(key))
         return projects
-    
+
     def clear_branches(self):
         git = Git(self)
         for b in self.branches():

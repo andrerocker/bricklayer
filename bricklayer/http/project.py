@@ -5,52 +5,50 @@ from cyclone.web import RequestHandler
 
 from model.project import Project
 
+def _project_json(project, branch):
+    return({
+        'name': project.name,
+        'branch': project.branches(),
+        'experimental': int(project.experimental),
+        'group_name': project.group_name,
+        'git_url': project.git_url,
+        'version': project.version(),
+        'last_tag_testing': project.last_tag(tag_type='testing'),
+        'last_tag_stable': project.last_tag(tag_type='stable'),
+        'last_tag_unstable': project.last_tag(tag_type='unstable'),
+        'last_commit': project.last_commit(branch)
+    })
+
+class ProjectIndexController(RequestHandler):
+
+    def get(self, branch="master"):
+        projects = Project.get_all()
+        response = map(lambda current: _project_json(current, branch), projects)
+        self.write(escape.json_encode(response))
+
 class ProjectController(RequestHandler):
 
-    def get(self, name=None, branch="master"):
-        if name:
-            response = self._project_json(Project(name), branch)
-            self.write(escape.json_encode(response))
-        else:
-            projects = Project.get_all()
-            response = []
-            for project in projects:
-                response.append(self._project_json(project, branch))
-            self.write(escape.json_encode(response))
+    def get(self, name, branch="master"):
+        project = Project(name)
+        json = _project_json(project, branch)
+        self.write(escape.json_encode(json))
 
-    def post(self, *args):
-        if len(args) >= 1:
-            name = args[0]
-            project = Project(name)
-            for key, value in self.request.arguments.iteritems():
-                if key in ("git_url", "version", "build_cmd", "install_cmd"):
-                    setattr(project, key, value[0])
-            project.save()
+    def post(self, name):
+        if Project(name).exists():
+            self.write(escape.json_encode({"status":  "Project already exists"}))
+            return
 
         try:
-            if not Project(self.get_argument('name')).exists():
-                raise
-        except Exception, e:
             project = Project()
-            project.name = self.get_argument('name')[0]
+            project.name = name
             project.git_url = self.get_argument('git_url')[0]
-            for name, parm in self.request.arguments.iteritems():
-                if name not in ('branch', 'version'):
-                    setattr(project, str(name), parm[0])
-            try:
-                project.add_branch(self.get_argument('branch'))
-                project.version(self.get_argument('branch'), self.get_argument('version'))
-                project.group_name = self.get_argument('group_name')
-                project.save()
-                log.msg('Project created:', project.name)
-
-                self.write(escape.json_encode({'status': 'ok'}))
-            except Exception, e:
-                log.err()
-                self.write(escape.json_encode({'status': "fail"}))
-
-        else:
-            self.write(escape.json_encode({'status':  "Project already exists"}))
+            project.group_name = self.get_argument('group_name')
+            project.save()
+            self.write(escape.json_encode({"status": "ok"}))
+            log.msg('Project created:', project.name)
+        except Exception, e:
+            log.err()
+            self.write(escape.json_encode({"status": "fail"}))
 
     # def put(self, name):
     #     project = Projects(name)
@@ -85,17 +83,3 @@ class ProjectController(RequestHandler):
     #     except Exception, e:
     #         log.err(e)
     #         self.write(escape.json_encode({'status': 'failed to delete %s' % str(e)}))
-
-    def _project_json(self, project, branch):
-        return({
-            'name': project.name,
-            'branch': project.branches(),
-            'experimental': int(project.experimental),
-            'group_name': project.group_name,
-            'git_url': project.git_url,
-            'version': project.version(),
-            'last_tag_testing': project.last_tag(tag_type='testing'),
-            'last_tag_stable': project.last_tag(tag_type='stable'),
-            'last_tag_unstable': project.last_tag(tag_type='unstable'),
-            'last_commit': project.last_commit(branch)
-        })

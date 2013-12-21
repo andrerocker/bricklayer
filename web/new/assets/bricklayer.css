@@ -1,0 +1,14 @@
+body {
+  padding-top: 20px;
+  padding-bottom: 40px;
+}
+
+.jumbotron {
+  margin: 80px 0;
+  text-align: center;
+}
+
+.jumbotron h1 {
+  font-size: 52px;
+  line-height: 1;
+}

@@ -15,15 +15,17 @@ from twisted.application import service, internet
 from http.main import MainController
 from http.build import BuildController
 from http.group import GroupController
+
 from http.project import ProjectController
+from http.project import ProjectIndexController
 
 def draw_routes():
     return Application([
         (r'/static/(.*)', cyclone.web.StaticFileHandler, {'path': brickconfig.get('static', 'dir')}),
-        (r'/project', ProjectController),
+        (r'/project', ProjectIndexController),
         (r'/project/?(.*)', ProjectController),
         (r'/group', GroupController),
-        (r'/build/(.*)', BuildController),        
+        (r'/build/(.*)', BuildController),
         # (r'/build/current', Current),
         # (r'/group/?(.*)', Group),
         # (r'/branch/(.*)', Branch),
@@ -34,7 +36,7 @@ def draw_routes():
     ])
 
 def start(application):
-    server = internet.TCPServer(int(brickconfig.get('server', 'port')), draw_routes(), interface="0.0.0.0")
+    server = internet.TCPServer(int(brickconfig.get('server', 'port')), draw_routes())
     server.setServiceParent(application)
 
 brickconfig = BrickConfig()
